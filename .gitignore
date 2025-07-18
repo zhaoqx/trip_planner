@@ -1,0 +1,3 @@
+# Python/Conda environment files
+.conda/
+.vscode/settings.json
