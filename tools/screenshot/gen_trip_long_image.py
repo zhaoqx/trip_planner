@@ -8,31 +8,36 @@ import os
 
 # 配置
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
-HTML_PATH = os.path.join(BASE_DIR, "docs/v0.1/cases/2025_beijing_harbin_yichun_family_trip_v0.3.html")
-IMG_PATH = os.path.join(BASE_DIR, "docs/v0.1/cases/2025_beijing_harbin_yichun_family_trip_v0.3_long.png")
+# 修改为当前对比页面
+HTML_PATH = os.path.join(BASE_DIR, "docs/v0.1/cases/2025_harbin_yichun_wudalianchi_compare.html")
+IMG_PATH = os.path.join(BASE_DIR, "docs/v0.1/cases/2025_harbin_yichun_wudalianchi_compare_long.png")
 EDGE_DRIVER_PATH = os.path.join(os.path.dirname(__file__), "msedgedriver.exe")
 
 edge_options = Options()
 edge_options.add_argument('--headless')
 edge_options.add_argument('--disable-gpu')
-edge_options.add_argument('--window-size=430,2000')
+# 适配更长页面
+edge_options.add_argument('--window-size=430,4000')
 edge_options.add_argument('--force-device-scale-factor=2')
 
 service = Service(EDGE_DRIVER_PATH)
 browser = webdriver.Edge(service=service, options=edge_options)
 browser.get('file://' + HTML_PATH)
-time.sleep(2)
+time.sleep(3)
 
 # 获取页面高度，调整窗口高度以截全图
 scroll_height = browser.execute_script('return document.body.scrollHeight')
 browser.set_window_size(430, scroll_height)
-time.sleep(1)
+time.sleep(2)
 
 # 截图
+
 browser.save_screenshot(IMG_PATH)
 browser.quit()
 
 # 可选：裁剪白边
+bbox = img.getbbox()
+
 img = Image.open(IMG_PATH)
 bbox = img.getbbox()
 img_cropped = img.crop(bbox)
