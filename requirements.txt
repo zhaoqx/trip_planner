@@ -3,3 +3,4 @@ beautifulsoup4
 playwright
 pandas
 openai
+Pillow
