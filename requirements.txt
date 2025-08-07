@@ -4,3 +4,6 @@ playwright
 pandas
 openai
 Pillow
+matplotlib
+folium
+plotly

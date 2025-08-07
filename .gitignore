@@ -1,3 +1,6 @@
 # Python/Conda environment files
 .conda/
 .vscode/settings.json
+
+# 忽略本地敏感配置文件
+local_config.py
