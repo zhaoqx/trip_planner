@@ -17,7 +17,8 @@ from reportlab.lib import colors
 from reportlab.lib.units import mm
 
 BASE_DIR = Path(__file__).parent
-TRIP_MD = BASE_DIR / 'trip_plan.md'
+# Read trip plan from materials folder
+TRIP_MD = BASE_DIR / 'materials' / 'trip_plan.md'
 OUTPUT_PDF = BASE_DIR / '《2025黑龙江旅行手册》.pdf'
 
 FONT_PATHS = [
@@ -189,6 +190,52 @@ def footer(canvas, doc):
     canvas.drawRightString(doc.pagesize[0]-15*mm, 10*mm, f'Page {doc.page}')
 
 
+def add_city_overview_page(story: List, title: str, desc: str, img_path: Path, use_landscape: bool = True):
+    """Add a city overview page with big map and brief intro."""
+    if not img_path.exists():
+        # fallback portrait text only
+        story.append(Paragraph(title, SECTION_TITLE))
+        if desc:
+            story.append(Paragraph(desc, BODY))
+        story.append(PageBreak())
+        return
+    if use_landscape:
+        story.append(NextPageTemplate('Landscape'))
+        story.append(PageBreak())
+        story.append(Paragraph(title, SECTION_TITLE))
+        if desc:
+            story.append(Paragraph(desc, BODY))
+        lw, lh = landscape(A4)
+        story.append(Image(str(img_path), width=lw-40*mm, height=lh-60*mm))
+        story.append(NextPageTemplate('Portrait'))
+        story.append(PageBreak())
+    else:
+        story.append(Paragraph(title, SECTION_TITLE))
+        if desc:
+            story.append(Paragraph(desc, BODY))
+        pw, ph = A4
+        story.append(Image(str(img_path), width=pw-40*mm, height=ph/2))
+        story.append(PageBreak())
+
+
+def add_topic_page(story: List, title: str, desc: str, img_path: Path | None = None, use_landscape: bool = False):
+    story.append(Paragraph(title, SECTION_TITLE))
+    if desc:
+        story.append(Paragraph(desc, BODY))
+    if img_path and img_path.exists():
+        if use_landscape:
+            story.append(NextPageTemplate('Landscape'))
+            story.append(PageBreak())
+            story.append(Paragraph(title + '（图示）', SUBTITLE))
+            lw, lh = landscape(A4)
+            story.append(Image(str(img_path), width=lw-40*mm, height=lh-60*mm))
+            story.append(NextPageTemplate('Portrait'))
+        else:
+            pw, ph = A4
+            story.append(Image(str(img_path), width=pw-40*mm, height=ph/2))
+    story.append(PageBreak())
+
+
 def generate_pdf():
     register_font()
     md = TRIP_MD.read_text(encoding='utf-8')
@@ -227,15 +274,7 @@ def generate_pdf():
         story.append(Image(str(overview_img), width=pw-50*mm, height=ph/2))
         story.append(PageBreak())
 
-    # Harbin map landscape
-    city_map = BASE_DIR / 'materials' / '哈尔滨市旅游地图.jpg'
-    if city_map.exists():
-        story.append(NextPageTemplate('Landscape'))
-        story.append(PageBreak())
-        story.append(Paragraph('哈尔滨市旅游地图（示意）', SUBTITLE))
-        story.append(Image(str(city_map), width=lw-40*mm, height=lh-60*mm))
-        story.append(NextPageTemplate('Portrait'))
-        story.append(PageBreak())
+    # 城市大图将穿插在具体日程后按需插入，不在此处统一展示
 
     # Daily sections
     detail_dir = BASE_DIR / 'materials' / 'details'
@@ -259,6 +298,66 @@ def generate_pdf():
                 if (i+1) % 2 == 0 and i+1 != len(imgs):
                     story.append(PageBreak())
         story.append(PageBreak())
+
+        # Insert required extra pages after specific days
+        dm = re.match(r'Day (\d+):', d['title'])
+        day_no = int(dm.group(1)) if dm else -1
+        materials_dir = BASE_DIR / 'materials'
+        if day_no == 2:
+            # Leaving Harbin with city map
+            add_city_overview_page(
+                story,
+                '再会·冰城哈尔滨',
+                '两天的城市观察，从“远东小巴黎”的历史建筑到松花江畔的现代活力，哈尔滨以独特的中西合璧气质留下深刻印记。下面这张全市地图可帮助你回顾已到访的地标，并规划未来的再次造访路线。',
+                materials_dir / '哈尔滨市旅游地图.jpg',
+                use_landscape=True
+            )
+        elif day_no == 3:
+            # Qiqihar city overview with map
+            add_city_overview_page(
+                story,
+                '鹤城齐齐哈尔全览',
+                '齐齐哈尔不仅有扎龙湿地的丹顶鹤，更是一座拥有厚实工业底蕴与草原风情的城市。请在地图上定位扎龙保护区、嫩江与城市主轴，理解城市与湿地的空间关系。',
+                materials_dir / '齐齐哈尔旅游图.jpg',
+                use_landscape=True
+            )
+        elif day_no == 4:
+            # Heihe overview ahead of day 5
+            add_city_overview_page(
+                story,
+                '黑河城市鸟瞰',
+                '位于黑龙江（阿穆尔河）畔的口岸城市，与对岸俄罗斯城市隔江相望。请在地图上找到口岸、瑷珲老城及沿江步道，了解边境城市的空间格局。',
+                materials_dir / '黑河旅游图.jpg',
+                use_landscape=True
+            )
+        elif day_no == 5:
+            # Hu Huanyong Line topic page
+            add_topic_page(
+                story,
+                '专题·胡焕庸线详解',
+                '胡焕庸线揭示了中国人口与经济的空间分布差异。本次行程多位于线的西北侧：地广人稀、湿地与火山地貌丰富。请结合所见思考：自然地理如何塑造聚落分布与产业形态？',
+                materials_dir / '胡焕庸线.png',
+                use_landscape=True
+            )
+        elif day_no == 6:
+            # Yichun overview page
+            add_city_overview_page(
+                story,
+                '林都伊春全景',
+                '一座与森林共生的城市。从红松母树林到奇石地貌，林业历史与生态保护在这里交织。请在地图上找到汤旺河、五营等重要森林景区。',
+                materials_dir / '伊春旅游图.jpg',
+                use_landscape=True
+            )
+        elif day_no == 8:
+            # Reflection/open questions page
+            q_text = (
+                '开放思考：<br/>'
+                '1) 哪一处自然景观最令你震撼？尝试描述它与地质/生态的联系。<br/>'
+                '2) 边境城市与内陆城市在街景与语言上有哪些不同？<br/>'
+                '3) 如果为朋友设计一条“黑龙江主题路线”，你的3个主题站点是什么？为什么？<br/>'
+                '4) 选择一张地图，标出你认为最有研究价值的地点，并写下你的观察提纲。'
+            )
+            add_topic_page(story, '探险回响·思考与总结', q_text)
 
     # Appendix
     story.append(Paragraph('附录：安全与装备要点', SECTION_TITLE))
