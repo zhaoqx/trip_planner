@@ -468,14 +468,7 @@ def build_day_page(story: List, d: DayPlan, state: RenderState):
     # 生成艺术化笔记面板（自动调字号以适配高度）
     left_panel = make_notes_panel(left_w, section_h, notes_title_txt, notes_body_txt, max_font=13.6, min_font=10.4)
 
-    # 若文本很长则改为单栏铺满并放弃右侧地图
-    single_column = len(notes_body_txt) > 1000
-    if single_column:
-        full_panel = make_notes_panel(avail_w, section_h + 6 * mm, notes_title_txt, notes_body_txt, max_font=13.6, min_font=10.4)
-        story.append(Spacer(1, 6))
-        story.append(full_panel)
-        story.append(PageBreak())
-        return
+    # 始终采用左右两栏布局（无论文本长度），确保右侧地图始终显示
 
     # 右侧：最多3张地图竖排
     right_items: List[Flowable] = []
