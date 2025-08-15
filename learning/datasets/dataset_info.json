@@ -1,0 +1,67 @@
+{
+  "datasets": {
+    "attractions.csv": {
+      "description": "景点信息数据集",
+      "columns": {
+        "attraction_id": "景点ID",
+        "name": "景点名称",
+        "city": "所在城市",
+        "category": "景点类别",
+        "rating": "平均评分",
+        "price_level": "价格等级(1-4)",
+        "visitor_count_monthly": "月访客量",
+        "opening_hours": "开放小时数",
+        "distance_from_center": "距市中心距离(公里)",
+        "accessibility_score": "交通便利度得分",
+        "season_popularity": "季节受欢迎度",
+        "has_parking": "是否有停车场",
+        "wifi_available": "是否提供WiFi"
+      },
+      "rows": 500,
+      "use_cases": [
+        "推荐系统",
+        "回归分析",
+        "聚类分析"
+      ]
+    },
+    "user_reviews.csv": {
+      "description": "用户评论数据集",
+      "columns": {
+        "review_id": "评论ID",
+        "attraction_id": "景点ID",
+        "user_id": "用户ID",
+        "rating": "用户评分",
+        "visit_date": "访问日期",
+        "review_text": "评论文本"
+      },
+      "rows": 2000,
+      "use_cases": [
+        "情感分析",
+        "文本挖掘",
+        "NLP应用"
+      ]
+    },
+    "user_behavior.csv": {
+      "description": "用户行为数据集",
+      "columns": {
+        "user_id": "用户ID",
+        "age_group": "年龄组",
+        "gender": "性别",
+        "travel_frequency": "年旅行频次",
+        "avg_budget_per_trip": "平均旅行预算",
+        "preferred_travel_purpose": "主要旅行目的",
+        "mobile_user": "是否为移动端用户",
+        "social_media_active": "是否活跃于社交媒体",
+        "loyalty_score": "忠诚度得分"
+      },
+      "rows": 1000,
+      "use_cases": [
+        "用户画像",
+        "分类预测",
+        "客户细分"
+      ]
+    }
+  },
+  "generated_date": "2025-08-15",
+  "notes": "这些是为机器学习学习生成的示例数据集，包含旅游相关的多种数据类型。"
+}

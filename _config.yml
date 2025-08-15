@@ -1,0 +1,37 @@
+# GitHub Pages configuration for ML/DL Learning Project
+
+# Redirect root to learning web interface
+plugins:
+  - jekyll-redirect-from
+
+# Site settings
+title: "机器学习与深度学习学习项目"
+description: "基于旅游规划的机器学习实践项目"
+baseurl: ""
+url: "https://zhaoqx.github.io/trip_planner"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Include files and directories
+include:
+  - learning/web/
+  - learning/notebooks/
+  - learning/examples/
+
+# Exclude from processing
+exclude:
+  - __pycache__/
+  - .env
+  - venv/
+  - .vscode/
+  - .conda/
+
+# Default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
