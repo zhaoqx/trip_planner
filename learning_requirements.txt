@@ -1,0 +1,18 @@
+# Machine Learning and Deep Learning libraries
+jupyter
+jupyterlab
+numpy
+pandas
+scikit-learn
+tensorflow
+torch
+torchvision
+seaborn
+matplotlib
+plotly
+xgboost
+lightgbm
+optuna
+mlflow
+streamlit
+gradio

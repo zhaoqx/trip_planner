@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器学习与深度学习 - 学习项目</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>机器学习与深度学习学习项目</h1>
+        <p>基于旅游规划场景的机器学习实践</p>
+    </header>
+
+    <nav>
+        <a href="#overview" class="nav-link">项目概览</a>
+        <a href="#examples" class="nav-link">示例项目</a>
+        <a href="#notebooks" class="nav-link">学习笔记</a>
+        <a href="#demos" class="nav-link">在线演示</a>
+    </nav>
+
+    <main>
+        <section id="overview">
+            <h2>项目概览</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🤖 机器学习基础</h3>
+                    <p>学习监督学习、无监督学习和强化学习的核心概念</p>
+                    <a href="#" class="btn">开始学习</a>
+                </div>
+                <div class="card">
+                    <h3>🧠 深度学习</h3>
+                    <p>探索神经网络、CNN、RNN等深度学习架构</p>
+                    <a href="#" class="btn">开始学习</a>
+                </div>
+                <div class="card">
+                    <h3>🗺️ 实际应用</h3>
+                    <p>将ML/DL技术应用到智能旅游规划中</p>
+                    <a href="#" class="btn">查看应用</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples">
+            <h2>示例项目</h2>
+            <div class="example-list">
+                <div class="example-item">
+                    <h3>旅游景点推荐系统</h3>
+                    <p>使用协同过滤和内容推荐算法为用户推荐个性化景点</p>
+                    <div class="tech-tags">
+                        <span>Python</span>
+                        <span>Scikit-learn</span>
+                        <span>Pandas</span>
+                    </div>
+                    <a href="examples/recommendation_demo.html" class="btn-secondary">查看演示</a>
+                </div>
+                
+                <div class="example-item">
+                    <h3>旅游文本情感分析</h3>
+                    <p>分析用户评论情感，帮助筛选优质旅游产品</p>
+                    <div class="tech-tags">
+                        <span>NLP</span>
+                        <span>深度学习</span>
+                        <span>TensorFlow</span>
+                    </div>
+                    <a href="examples/sentiment_demo.html" class="btn-secondary">查看演示</a>
+                </div>
+
+                <div class="example-item">
+                    <h3>智能路线优化</h3>
+                    <p>使用机器学习优化旅游路线，减少时间成本</p>
+                    <div class="tech-tags">
+                        <span>优化算法</span>
+                        <span>强化学习</span>
+                        <span>图算法</span>
+                    </div>
+                    <a href="examples/route_optimization_demo.html" class="btn-secondary">查看演示</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="notebooks">
+            <h2>学习笔记本</h2>
+            <p>交互式Jupyter笔记本，逐步学习ML/DL概念</p>
+            <div class="notebook-grid">
+                <div class="notebook-card">
+                    <h4>01 - 机器学习基础</h4>
+                    <p>线性回归、分类、聚类等基础算法</p>
+                    <a href="../notebooks/01_ml_basics.ipynb" class="btn-small">打开笔记本</a>
+                </div>
+                <div class="notebook-card">
+                    <h4>02 - 深度学习入门</h4>
+                    <p>神经网络、反向传播、激活函数</p>
+                    <a href="../notebooks/02_dl_fundamentals.ipynb" class="btn-small">打开笔记本</a>
+                </div>
+                <div class="notebook-card">
+                    <h4>03 - 旅游数据分析</h4>
+                    <p>使用ML/DL分析旅游数据并构建应用</p>
+                    <a href="../notebooks/03_ml_for_trips.ipynb" class="btn-small">打开笔记本</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="demos">
+            <h2>在线演示</h2>
+            <div class="demo-container">
+                <iframe src="recommendation_widget.html" width="100%" height="400"></iframe>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 机器学习与深度学习学习项目 | <a href="https://github.com/zhaoqx/trip_planner">GitHub仓库</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

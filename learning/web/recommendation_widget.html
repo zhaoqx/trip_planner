@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅游推荐演示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .widget-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .btn-recommend {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-recommend:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .recommendations {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .rec-item {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+        .rec-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        .rec-score {
+            color: #059669;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .rec-desc {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="widget-container">
+        <h3 style="text-align: center; color: #374151; margin-bottom: 24px;">🎯 智能景点推荐</h3>
+        
+        <form id="recommender-form">
+            <div class="input-group">
+                <label for="destination">目的地</label>
+                <select id="destination" required>
+                    <option value="">选择目的地...</option>
+                    <option value="beijing">北京</option>
+                    <option value="shanghai">上海</option>
+                    <option value="hangzhou">杭州</option>
+                    <option value="chengdu">成都</option>
+                    <option value="xian">西安</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="interests">兴趣偏好</label>
+                <select id="interests" required>
+                    <option value="">选择兴趣...</option>
+                    <option value="history">历史文化</option>
+                    <option value="nature">自然风光</option>
+                    <option value="food">美食体验</option>
+                    <option value="modern">现代都市</option>
+                    <option value="art">艺术展览</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="budget">预算范围</label>
+                <select id="budget" required>
+                    <option value="">选择预算...</option>
+                    <option value="low">经济型 (< ¥500/天)</option>
+                    <option value="medium">舒适型 (¥500-1000/天)</option>
+                    <option value="high">豪华型 (> ¥1000/天)</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-recommend">获取AI推荐</button>
+        </form>
+        
+        <div id="recommendations" class="recommendations hidden">
+            <h4 style="color: #374151; margin-bottom: 16px;">🤖 AI推荐结果</h4>
+            <div id="rec-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const recommendations = {
+            beijing: {
+                history: [
+                    { name: "故宫博物院", score: 0.95, desc: "世界最大的古建筑群，明清两朝皇宫" },
+                    { name: "天坛公园", score: 0.90, desc: "明清皇帝祭天祈谷的神圣场所" },
+                    { name: "颐和园", score: 0.88, desc: "中国古典园林艺术的杰作" }
+                ],
+                nature: [
+                    { name: "香山公园", score: 0.85, desc: "秋季红叶胜地，自然风光优美" },
+                    { name: "北海公园", score: 0.82, desc: "古典园林与自然湖景结合" },
+                    { name: "奥林匹克森林公园", score: 0.80, desc: "现代化城市绿肺，适合休闲" }
+                ],
+                food: [
+                    { name: "全聚德烤鸭店", score: 0.92, desc: "百年老字号，正宗北京烤鸭" },
+                    { name: "南锣鼓巷", score: 0.87, desc: "胡同小吃街，体验老北京风味" },
+                    { name: "簋街", score: 0.85, desc: "夜宵美食街，各种地方菜系" }
+                ],
+                modern: [
+                    { name: "鸟巢体育馆", score: 0.90, desc: "奥运地标建筑，现代设计典范" },
+                    { name: "国贸商圈", score: 0.85, desc: "国际化商务区，现代都市风貌" },
+                    { name: "三里屯", score: 0.83, desc: "时尚购物与夜生活中心" }
+                ],
+                art: [
+                    { name: "中国美术馆", score: 0.88, desc: "国家级美术馆，展示中国艺术" },
+                    { name: "798艺术区", score: 0.92, desc: "当代艺术聚集地，工业遗产改造" },
+                    { name: "国家大剧院", score: 0.90, desc: "现代建筑艺术与表演艺术结合" }
+                ]
+            },
+            shanghai: {
+                history: [
+                    { name: "外滩", score: 0.93, desc: "万国建筑博览群，上海历史缩影" },
+                    { name: "豫园", score: 0.88, desc: "明代私家园林，江南古典建筑" },
+                    { name: "石库门", score: 0.85, desc: "海派建筑特色，历史文化街区" }
+                ],
+                modern: [
+                    { name: "陆家嘴", score: 0.95, desc: "金融中心，摩天大楼群" },
+                    { name: "上海中心大厦", score: 0.92, desc: "中国第一高楼，观景体验" },
+                    { name: "新天地", score: 0.87, desc: "时尚商业区，中西文化融合" }
+                ]
+            }
+        };
+        
+        document.getElementById('recommender-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const destination = document.getElementById('destination').value;
+            const interests = document.getElementById('interests').value;
+            const budget = document.getElementById('budget').value;
+            
+            if (!destination || !interests || !budget) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 模拟AI推荐算法
+            const destRecs = recommendations[destination];
+            const interestRecs = destRecs && destRecs[interests] || [];
+            
+            // 根据预算调整推荐
+            let filteredRecs = interestRecs;
+            if (budget === 'low') {
+                filteredRecs = interestRecs.filter(rec => rec.score <= 0.90);
+            } else if (budget === 'high') {
+                filteredRecs = interestRecs.slice(0, 2); // 推荐高端选择
+            }
+            
+            if (filteredRecs.length === 0) {
+                filteredRecs = [
+                    { name: "抱歉，暂无符合条件的推荐", score: 0, desc: "请尝试调整筛选条件" }
+                ];
+            }
+            
+            // 显示推荐结果
+            const recList = document.getElementById('rec-list');
+            recList.innerHTML = filteredRecs.map(rec => `
+                <div class="rec-item">
+                    <div class="rec-title">${rec.name}</div>
+                    <div class="rec-score">推荐指数: ${(rec.score * 100).toFixed(0)}%</div>
+                    <div class="rec-desc">${rec.desc}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('recommendations').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

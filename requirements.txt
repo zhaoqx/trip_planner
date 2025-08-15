@@ -8,3 +8,7 @@ matplotlib
 folium
 plotly
 reportlab
+# Machine Learning essentials
+scikit-learn
+jupyter
+seaborn
