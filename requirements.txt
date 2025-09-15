@@ -8,3 +8,5 @@ matplotlib
 folium
 plotly
 reportlab
+python-docx
+pillow-heif
